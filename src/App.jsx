@@ -7,7 +7,6 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 
 export default function App() {
   const [input, setInput] = useState({ title: "", content: "" });
-  const [notes, setNotes] = useState([]);
   const [newButton, setNewButton] = useState(false);
   const [tags, setTags] = useState([
     { tagName: "#all", notes: [] },
@@ -23,11 +22,6 @@ export default function App() {
     let now = new Date();
     let date = `${now.getDate()} ${monthNames[now.getMonth()]}, ${now.getFullYear()}`;
     let newNote = { title: input.title, content: input.content, created: date };
-
-    // update notes array with new task
-    setNotes((prev) => {
-      return [...prev, { title: input.title, content: input.content, created: date }];
-    });
 
     setTags((prevTags) =>
       prevTags.map((tag) => {
