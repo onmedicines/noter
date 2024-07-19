@@ -9,6 +9,12 @@ export default function App() {
   const [input, setInput] = useState({ title: "", content: "" });
   const [notes, setNotes] = useState([]);
   const [newButton, setNewButton] = useState(false);
+  const [tags, setTags] = useState([
+    { tagName: "#all", notes: [] },
+    { tagName: "#priority", notes: [] },
+    { tagName: "#shopping", notes: [] },
+    { tagName: "#work", notes: [] },
+  ]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -45,6 +51,18 @@ export default function App() {
           <button onClick={handleNewButton} className="bg-white text-black rounded-xl text-3xl font-medium py-4">
             New +
           </button>
+          <div className="tags-container">
+            <h1 className="text-white font-medium text-3xl mb-4">Tags</h1>
+            <section className="tags flex flex-col gap-4 ">
+              {tags.map((tag, index) => {
+                return (
+                  <p key={index} id={index} className="text-white text-2xl ml-4">
+                    {tag.tagName}
+                  </p>
+                );
+              })}
+            </section>
+          </div>
         </section>
         <main className="rounded-2xl bg-white col-span-6 p-8">
           {newButton ? (
