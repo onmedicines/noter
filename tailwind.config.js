@@ -5,6 +5,8 @@ export default {
     extend: {
       width: {
         wide: "30rem",
+        wider: "40rem",
+        widest: "50rem",
       },
       gridAutoColumns: {
         23: "23%",

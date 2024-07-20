@@ -10,38 +10,20 @@ export default function App() {
   const [newButton, setNewButton] = useState(false);
   const [tags, setTags] = useState([
     {
-      tagName: "#all",
-      notes: [
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-      ],
+      tagName: "all",
+      notes: [],
     },
     {
-      tagName: "#priority",
-      notes: [
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-      ],
+      tagName: "priority",
+      notes: [],
     },
     {
-      tagName: "#shopping",
-      notes: [
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-        { title: "Title", content: "Content", created: "created" },
-      ],
+      tagName: "shopping",
+      notes: [],
     },
-    { tagName: "#work", notes: [] },
+    { tagName: "work", notes: [] },
   ]);
+  const [checked, setChecked] = useState({ all: true, priority: false, shopping: false, work: false });
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -51,9 +33,9 @@ export default function App() {
     let date = `${now.getDate()} ${monthNames[now.getMonth()]}, ${now.getFullYear()}`;
     let newNote = { title: input.title, content: input.content, created: date };
 
-    setTags((prevTags) =>
-      prevTags.map((tag) => {
-        if (tag.tagName === "#all") return { ...tag, notes: [...tag.notes, newNote] };
+    setTags((prevtags) =>
+      prevtags.map((tag) => {
+        if (checked[tag.tagName]) return { ...tag, notes: [...tag.notes, newNote] };
         else return tag;
       })
     );
@@ -62,6 +44,7 @@ export default function App() {
     setInput({ title: "", content: "" });
     // reset newButton to viefalsew notes
     setNewButton(false);
+    setChecked({ all: true, priority: false, shopping: false, work: false });
   };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -69,9 +52,14 @@ export default function App() {
       return { ...prev, [name]: value };
     });
   };
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setChecked((prev) => ({ ...prev, [name]: checked }));
+  };
   const handleNewButton = () => {
     setNewButton(true);
   };
+  // console.log(tags); //comment
 
   return (
     <>
@@ -86,7 +74,7 @@ export default function App() {
             <section className="tags flex flex-col gap-4 ">
               {tags.map((tag, index) => {
                 return (
-                  <p key={index} id={index} className="text-white text-2xl ml-4">
+                  <p key={index} id={index} className="before:content-['#'] text-white text-2xl ml-4">
                     {tag.tagName}
                   </p>
                 );
@@ -96,32 +84,36 @@ export default function App() {
         </section>
         <main className="main h-screen rounded-2xl bg-white col-span-6 p-8 overflow-y-scroll">
           {newButton ? (
-            <CreateNote handleInputChange={handleInputChange} handleFormSubmit={handleFormSubmit} title={input.title} content={input.content}></CreateNote>
+            <CreateNote handleInputChange={handleInputChange} handleFormSubmit={handleFormSubmit} handleCheckboxChange={handleCheckboxChange} title={input.title} content={input.content} checked={checked}></CreateNote>
           ) : (
             <>
               <section className="heading text-5xl mb-8">
                 <h1>Your Notes</h1>
               </section>
               <section className="notes-container grid gap-12">
-                {tags.map((tag) => {
+                {tags.map((tag, index) => {
                   return (
-                    <div>
-                      <h1>{tag.tagName}</h1>
-                      <div className="cards-container grid grid-flow-col auto-cols-29 gap-8 overflow-x-scroll py-4">
-                        {tag.notes.map((note, index) => {
-                          return (
-                            <div key={index} id={index} className="card rounded-xl bg-zinc-700 text-white p-8 flex flex-col gap-4 justify-between">
-                              <div className="flex flex-col gap-4">
-                                <p className="text-3xl font-semibold ">{note.title}</p>
-                                <p className="text-2xl line-clamp-2 ">{note.content}</p>
-                                <p className="text-base font-thin ">{note.created}</p>
-                              </div>
-                              <button className="border-2 border-zinc-300 outline-none hover:bg-zinc-100 hover:text-black py-2 px-4 w-fit">delete</button>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+                    <>
+                      {tag.notes.length !== 0 && (
+                        <div>
+                          <h1 className="before:content-['#'] text-3xl">{tag.tagName}</h1>
+                          <div className="cards-container grid grid-flow-col auto-cols-29 gap-8 overflow-x-scroll py-4">
+                            {tag.notes.map((note, index) => {
+                              return (
+                                <div key={index} id={index} className="card rounded-xl bg-zinc-700 text-white p-8 flex flex-col gap-4 justify-between">
+                                  <div className="flex flex-col gap-4">
+                                    <p className="text-3xl font-semibold ">{note.title}</p>
+                                    <p className="text-2xl line-clamp-2 ">{note.content}</p>
+                                    <p className="text-base font-thin ">{note.created}</p>
+                                  </div>
+                                  <button className="border-2 border-zinc-300 outline-none hover:bg-zinc-100 hover:text-black py-2 px-4 w-fit">delete</button>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </>
                   );
                 })}
               </section>

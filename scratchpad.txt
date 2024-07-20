@@ -12,3 +12,12 @@
 {
     <Note key={index} id={index} title={note.title} content={note.content} created={note.created}></Note>;
 }
+
+{
+    { title: "Title", content: "Content", created: "created" },
+    { title: "Title", content: "Content", created: "created" },
+    { title: "Title", content: "Content", created: "created" },
+    { title: "Title", content: "Content", created: "created" },
+    { title: "Title", content: "Content", created: "created" },
+      
+}
