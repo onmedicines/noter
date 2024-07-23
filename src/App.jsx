@@ -9,7 +9,7 @@ export default function App() {
   const [input, setInput] = useState({ title: "", content: "" });
   const [isNewNoteVisible, setIsNewNoteVisible] = useState(false);
   const [notes, setNotes] = useState([]);
-  const [isViewing, setIsViewing] = useState("");
+  const [isViewing, setIsViewing] = useState("all");
   const [isTagEmpty, setIsTagEmpty] = useState({
     all: false,
     priority: false,
@@ -100,32 +100,21 @@ export default function App() {
               <h1>Your Notes</h1>
             </section>
             <section className="notes-container grid gap-12">
-              {isViewing === "" ? (
-                <div>
-                  <h1 className="before:content-['#'] text-3xl font-bold bg-zinc-800 text-white inline-block py-4 px-8 rounded-full">all</h1>
-                  <div className="grid grid-cols-4 gap-8">
-                    {notes.map((note, index) => {
-                      if (note.tags.includes("all")) return <Note key={index} id={index} title={note.title} content={note.content} created={note.created}></Note>;
+              <div>
+                <h1 className="before:content-['#'] text-3xl font-bold bg-zinc-800 text-white inline-block py-4 px-8 rounded-full">{isViewing}</h1>
+                {filteredNotes.length !== 0 ? (
+                  <div className="py-8 grid grid-cols-3 gap-8">
+                    {filteredNotes.map((note, index) => {
+                      return note && <Note key={index} id={index} title={note.title} content={note.content} created={note.created}></Note>;
                     })}
                   </div>
-                </div>
-              ) : (
-                <div>
-                  <h1 className="before:content-['#'] text-3xl font-bold bg-zinc-800 text-white inline-block py-4 px-8 rounded-full">{isViewing}</h1>
-                  {filteredNotes.length !== 0 ? (
-                    <div className="py-8 grid grid-cols-3 gap-8">
-                      {filteredNotes.map((note, index) => {
-                        return note && <Note key={index} id={index} title={note.title} content={note.content} created={note.created}></Note>;
-                      })}
-                    </div>
-                  ) : (
-                    <div className="py-8">
-                      <p className="text-2xl">Oops! You currently have no notes in this category.</p>
-                      <p className="text-2xl">Try Adding a note in this category by clicking the "New +" button.</p>
-                    </div>
-                  )}
-                </div>
-              )}
+                ) : (
+                  <div className="py-8">
+                    <p className="text-2xl">Oops! You currently have no notes in this category.</p>
+                    <p className="text-2xl">Try Adding a note in this category by clicking the "New +" button.</p>
+                  </div>
+                )}
+              </div>
             </section>
           </>
         )}
