@@ -1,5 +1,4 @@
 export default function CreateNote({ title, content, handleFormSubmit, handleInputChange, handleCheckboxChange, checked }) {
-  console.log(checked);
   return (
     <div className="bg-white grid place-items-center gap-20">
       <h1 className="text-6xl mt-20">Make a note</h1>
